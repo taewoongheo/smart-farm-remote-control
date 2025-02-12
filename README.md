@@ -1,97 +1,60 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Smart Farm Remote Control System
 
-# Getting Started
+## 프로젝트 소개
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+태양광 발전을 활용한 스마트팜 원격 제어 시스템입니다. React Native를 사용하여 모바일 애플리케이션을 개발하고, ESP32를 통해 하드웨어를 제어합니다.
 
-## Step 1: Start Metro
+## 주요 기능
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+### **실시간 환경 모니터링**
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+- 온도, 습도, 토양 습도, 광량 등 실시간 데이터 확인
+- 센서 데이터 시각화
 
-```sh
-# Using npm
-npm start
+### **자동 제어 시스템**
 
-# OR using Yarn
-yarn start
-```
+- 사용자 설정 기준값에 따른 자동 제어
+- 온도, 습도, 토양습도, 광량에 따른 모듈별 자동 제어
+- 임계값 기반 알람 시스템
 
-## Step 2: Build and run your app
+### **원격 제어**
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+- 실시간 환경 정보 확인
+- 기준값 원격 설정 및 수정
+- 실시간 모니터링 및 제어 상태 확인
 
-### Android
+## 기술 스택
 
-```sh
-# Using npm
-npm run android
+- **Frontend**: React Native
+- **Backend**: Firebase
+- **Hardware**: ESP32, 각종 센서 모듈
+- **External API**: [농촌진흥청 스마트팜 생산성 향상 모델 API](https://smartfarm.rda.go.kr/dtsv/grwhctstb_pub.do)
 
-# OR using Yarn
-yarn android
-```
+## 시스템 구성
 
-### iOS
+1. **모바일 애플리케이션**
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+   - 사용자 인터페이스
+   - 환경 데이터 시각화
+   - 기준 값 입력 파라미터
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+2. **하드웨어 구성**
+   - ESP32 메인 컨트롤러
+   - 온습도 센서
+   - 토양습도 센서
+   - 광량 센서
+   - LED 모듈
+   - 쿨링 팬
+   - 가습기 모듈
 
-```sh
-bundle install
-```
+## 데이터 흐름
 
-Then, and every time you update your native dependencies, run:
+1. 외부 API에서 작물 최적 생육정보 수집
+2. 모바일 앱에서 사용자 기준값 설정
+3. ESP32로 제어 파라미터 전송
+4. 실시간 환경 데이터 모니터링 및 자동 제어
+5. 모바일 앱에서 실시간 상태 확인 및 수동 제어 가능
 
-```sh
-bundle exec pod install
-```
+## 설치 및 실행
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
-
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
-
-## Step 3: Modify your app
-
-Now that you have successfully run the app, let's make changes!
-
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+(구체적인 설치 방법과 실행 방법은 프로젝트 완성 후 추가 예정)
