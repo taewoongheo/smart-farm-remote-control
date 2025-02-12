@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {
   Alert,
+  Button,
   RefreshControl,
   SafeAreaView,
   ScrollView,
@@ -15,6 +16,31 @@ function App() {
   const [sensorData, setSensorData] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
   const [lastUpdate, setLastUpdate] = useState(null);
+
+  // 기존 state에 추가
+  const [threshold, setThreshold] = useState(50); // 기준 조도값 (0-100%)
+
+  // ESP32로 기준값 전송하는 함수 추가
+  const sendThreshold = async () => {
+    try {
+      const response = await fetch(`http://${ESP32_IP}/api/threshold`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          lightThreshold: threshold,
+        }),
+      });
+
+      if (response.ok) {
+        Alert.alert('성공', '기준값이 설정되었습니다.');
+      }
+    } catch (error) {
+      Alert.alert('에러', 'ESP32와 통신 중 오류가 발생했습니다.');
+      console.error(error);
+    }
+  };
 
   const fetchSensorData = async () => {
     try {
@@ -68,6 +94,21 @@ function App() {
           <Text style={styles.sensorText}>
             💡 조도: {sensorData.light.percentage}%
           </Text>
+
+          <View style={styles.thresholdContainer}>
+            <Text style={styles.sensorText}>기준 조도: {threshold}%</Text>
+            <View style={styles.buttonContainer}>
+              <Button
+                title="-"
+                onPress={() => setThreshold(Math.max(0, threshold - 5))}
+              />
+              <Button
+                title="+"
+                onPress={() => setThreshold(Math.min(100, threshold + 5))}
+              />
+              <Button title="설정" onPress={sendThreshold} />
+            </View>
+          </View>
         </View>
 
         {lastUpdate && (
@@ -112,6 +153,17 @@ const styles = StyleSheet.create({
   updateText: {
     textAlign: 'center',
     color: '#444',
+    marginTop: 8,
+  },
+  thresholdContainer: {
+    marginTop: 16,
+    padding: 8,
+    borderTopWidth: 1,
+    borderTopColor: '#eee',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     marginTop: 8,
   },
 });

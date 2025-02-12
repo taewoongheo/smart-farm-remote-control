@@ -18,6 +18,12 @@ DHT dht(DHTPIN, DHTTYPE);
 // 토양 습도 센서
 #define SOILSENSORPIN 33
 
+// LED 모듈
+#define LED_PIN 4
+
+// 조도 초기 기준값
+int lightThreshold = 50;
+
 WebServer server(80);
 
 void setup() {
@@ -26,6 +32,9 @@ void setup() {
 
   // 빛 감지 센서 핀 설정
   pinMode(LIGHT_SENSOR_PIN, INPUT);
+
+  // LED 모듈 설정
+  pinMode(LED_PIN, OUTPUT);
   
   // WiFi 연결
   WiFi.begin(ssid, password);
@@ -73,7 +82,36 @@ void handleSensorData() {
   server.send(200, "application/json", response);
 }
 
+// 새로운 핸들러 함수 추가
+void handleThreshold() {
+  if (server.hasArg("plain")) {
+    String body = server.arg("plain");
+    StaticJsonDocument<200> doc;
+    DeserializationError error = deserializeJson(doc, body);
+    
+    if (!error) {
+      lightThreshold = doc["lightThreshold"];
+      server.send(200, "application/json", "{\"status\":\"success\"}");
+    } else {
+      server.send(400, "application/json", "{\"status\":\"error\",\"message\":\"Invalid JSON\"}");
+    }
+  } else {
+    server.send(400, "application/json", "{\"status\":\"error\",\"message\":\"No data received\"}");
+  }
+}
+
 void loop() {
   server.handleClient();
+
+  // LED 제어 로직 추가
+  int currentLight = analogRead(LIGHT_SENSOR_PIN);
+  int currentLightPercentage = map(currentLight, 0, 4095, 0, 100);
+  
+  if (currentLightPercentage < lightThreshold) {
+    digitalWrite(LED_PIN, HIGH);  // LED 켜기
+  } else {
+    digitalWrite(LED_PIN, LOW);   // LED 끄기
+  }
+
   delay(100);
 }
