@@ -15,6 +15,9 @@ DHT dht(DHTPIN, DHTTYPE);
 // 빛 감지 센서
 #define LIGHT_SENSOR_PIN 34
 
+// 토양 습도 센서
+#define SOILSENSORPIN 33
+
 WebServer server(80);
 
 void setup() {
@@ -60,6 +63,10 @@ void handleSensorData() {
   int lightValue = analogRead(LIGHT_SENSOR_PIN);
   lightData["percentage"] = map(lightValue, 0, 4095, 0, 100);  // 0-4095를 0-100%로 변환
   
+  JsonObject soilData = doc.createNestedObject("soil");
+  int soilHumidityValue = analogRead(SOILSENSORPIN);
+  soilData["soilHumidity"] = soilHumidityValue;
+
   String response;
   serializeJson(doc, response);
   

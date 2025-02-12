@@ -63,6 +63,9 @@ function App() {
             💧 습도: {sensorData.dht11.humidity}%
           </Text>
           <Text style={styles.sensorText}>
+            🌱 토양 습도: {sensorData.soil.soilHumidity}%
+          </Text>
+          <Text style={styles.sensorText}>
             💡 조도: {sensorData.light.percentage}%
           </Text>
         </View>
