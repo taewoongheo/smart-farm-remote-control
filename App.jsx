@@ -62,6 +62,9 @@ function App() {
           <Text style={styles.sensorText}>
             💧 습도: {sensorData.dht11.humidity}%
           </Text>
+          <Text style={styles.sensorText}>
+            💡 조도: {sensorData.light.percentage}%
+          </Text>
         </View>
 
         {lastUpdate && (

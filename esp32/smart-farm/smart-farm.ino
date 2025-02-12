@@ -12,11 +12,17 @@ const char* password = "knulibrary";
 #define DHTTYPE DHT11
 DHT dht(DHTPIN, DHTTYPE);
 
+// 빛 감지 센서
+#define LIGHT_SENSOR_PIN 34
+
 WebServer server(80);
 
 void setup() {
   Serial.begin(9600);
   Serial.println("안녕하세요");
+
+  // 빛 감지 센서 핀 설정
+  pinMode(LIGHT_SENSOR_PIN, INPUT);
   
   // WiFi 연결
   WiFi.begin(ssid, password);
@@ -48,6 +54,11 @@ void handleSensorData() {
   JsonObject dht11Data = doc.createNestedObject("dht11");
   dht11Data["temperature"] = dht.readTemperature();
   dht11Data["humidity"] = dht.readHumidity();
+
+  // 빛 감지 센서 데이터
+  JsonObject lightData = doc.createNestedObject("light");
+  int lightValue = analogRead(LIGHT_SENSOR_PIN);
+  lightData["percentage"] = map(lightValue, 0, 4095, 0, 100);  // 0-4095를 0-100%로 변환
   
   String response;
   serializeJson(doc, response);
