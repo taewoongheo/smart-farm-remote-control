@@ -4,8 +4,8 @@
 #include <DHT.h>
 
 // WiFi 설정
-const char* ssid = "2F 열람 좌석";
-const char* password = "knulibrary";
+const char* ssid = "";
+const char* password = "";
 
 // DHT11 센서
 #define DHTPIN 18

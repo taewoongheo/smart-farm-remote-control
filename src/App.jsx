@@ -9,8 +9,7 @@ import {
   Text,
   View,
 } from 'react-native';
-
-const ESP32_IP = '192.168.0.14';
+import {ESP32_IP} from '@env';
 
 function App() {
   const [sensorData, setSensorData] = useState(null);
@@ -61,8 +60,8 @@ function App() {
 
   useEffect(() => {
     fetchSensorData();
-    const interval = setInterval(fetchSensorData, 5000);
-    return () => clearInterval(interval);
+    // const interval = setInterval(fetchSensorData, 5000);
+    // return () => clearInterval(interval);
   }, []);
 
   if (!sensorData) {
