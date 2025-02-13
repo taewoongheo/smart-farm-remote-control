@@ -11,16 +11,33 @@ import {
 } from 'react-native';
 import {ESP32_IP} from '@env';
 
+const mockSensorData = {
+  dht11: {
+    temperature: 25.5,
+    humidity: 60,
+  },
+  soil: {
+    soilHumidity: 75,
+  },
+  light: {
+    percentage: 80,
+  },
+};
+
 function App() {
+  const ESP32_IS_CONNECT = false;
+
   const [sensorData, setSensorData] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
   const [lastUpdate, setLastUpdate] = useState(null);
+  const [threshold, setThreshold] = useState(50);
 
-  // 기존 state에 추가
-  const [threshold, setThreshold] = useState(50); // 기준 조도값 (0-100%)
-
-  // ESP32로 기준값 전송하는 함수 추가
   const sendThreshold = async () => {
+    if (!ESP32_IS_CONNECT) {
+      console.log('ESP32 연결되지 않음 - 임시 저장:', threshold);
+      return;
+    }
+
     try {
       const response = await fetch(`http://${ESP32_IP}/api/threshold`, {
         method: 'POST',
@@ -36,20 +53,24 @@ function App() {
         Alert.alert('성공', '기준값이 설정되었습니다.');
       }
     } catch (error) {
-      Alert.alert('에러', 'ESP32와 통신 중 오류가 발생했습니다.');
-      console.error(error);
+      console.error('ESP32 통신 에러:', error);
     }
   };
 
   const fetchSensorData = async () => {
+    if (!ESP32_IS_CONNECT) {
+      setSensorData(mockSensorData);
+      setLastUpdate(new Date().toLocaleTimeString());
+      return;
+    }
+
     try {
       const response = await fetch(`http://${ESP32_IP}/api/sensors`);
       const data = await response.json();
       setSensorData(data);
       setLastUpdate(new Date().toLocaleTimeString());
     } catch (error) {
-      Alert.alert('에러', 'ESP32와 통신 중 오류가 발생했습니다.');
-      console.error(error);
+      console.error('ESP32 통신 에러:', error);
     }
   };
 
@@ -60,8 +81,8 @@ function App() {
 
   useEffect(() => {
     fetchSensorData();
-    // const interval = setInterval(fetchSensorData, 5000);
-    // return () => clearInterval(interval);
+    const interval = setInterval(fetchSensorData, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   if (!sensorData) {
