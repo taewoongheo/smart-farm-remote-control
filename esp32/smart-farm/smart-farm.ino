@@ -2,10 +2,11 @@
 #include <WebServer.h>
 #include <ArduinoJson.h>
 #include <DHT.h>
+#include <WiFiSecrets.h>
 
 // WiFi 설정
-const char* ssid = "";
-const char* password = "";
+const char* ssid = WIFI_SSID;
+const char* password = WIFI_PASSWORD;
 
 // DHT11 센서
 #define DHTPIN 18

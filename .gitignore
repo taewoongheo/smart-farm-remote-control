@@ -76,3 +76,6 @@ yarn-error.log
 # Environment variables
 .env
 .env.d.ts
+
+# esp32
+/esp32/smart-farm/WiFiSecrets.h
