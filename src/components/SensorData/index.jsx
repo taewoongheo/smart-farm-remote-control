@@ -2,7 +2,7 @@ import React from 'react';
 import {Text, View} from 'react-native';
 import {styles} from './styles';
 
-function SensorData({sensorData, lastUpdate, thresholds = null}) {
+function SensorData({sensorData, lastUpdate, threshold, thresholdIsLoading}) {
   if (sensorData === null) {
     return (
       <View>
@@ -16,32 +16,33 @@ function SensorData({sensorData, lastUpdate, thresholds = null}) {
       title: '온도',
       icon: '🌡️',
       current: sensorData.dht11.temperature,
-      target: thresholds?.temperature || 25,
+      target: threshold?.temperature || 25,
       unit: '°C',
     },
     {
       title: '습도',
       icon: '💧',
       current: sensorData.dht11.humidity,
-      target: thresholds?.humidity || 60,
+      target: threshold?.humidity || 60,
       unit: '%',
     },
     {
       title: '토양 습도',
       icon: '🌱',
       current: sensorData.soil.soilHumidity,
-      target: thresholds?.soilHumidity || 70,
+      target: threshold?.soilHumidity || 70,
       unit: '%',
     },
     {
       title: '조도',
       icon: '💡',
       current: sensorData.light.percentage,
-      target: thresholds?.light || 50,
+      target: threshold?.light || 50,
       unit: '%',
     },
   ];
 
+  console.log(cards);
   return (
     <View style={styles.container}>
       <View style={styles.gridContainer}>
@@ -56,7 +57,7 @@ function SensorData({sensorData, lastUpdate, thresholds = null}) {
               <View style={styles.valueBox}>
                 <Text style={styles.valueLabel}>목표</Text>
                 <Text style={styles.currentValue}>
-                  {card.target}
+                  {thresholdIsLoading ? '로딩 중..' : card.target}
                   <Text style={styles.unit}>{card.unit}</Text>
                 </Text>
               </View>
