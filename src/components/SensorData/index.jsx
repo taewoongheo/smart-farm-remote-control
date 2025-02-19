@@ -1,9 +1,25 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 import {styles} from './styles';
+import {useSensorData} from '../../hooks/useSensorData';
+import DataCard from './DataCard';
 
-function SensorData({sensorData, lastUpdate, threshold, thresholdIsLoading}) {
-  if (sensorData === null) {
+function SensorData({threshold, thresholdIsLoading}) {
+  const {sensorData, lastUpdate, refreshing, setRefreshing, updateSensorData} =
+    useSensorData();
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await updateSensorData();
+    } catch (err) {
+      console.error('센서 데이터를 가져올 수 없습니다', err);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
+  if (refreshing || !sensorData) {
     return (
       <View>
         <Text>로딩중.....</Text>
@@ -42,51 +58,23 @@ function SensorData({sensorData, lastUpdate, threshold, thresholdIsLoading}) {
     },
   ];
 
-  console.log(cards);
   return (
     <View style={styles.container}>
       <View style={styles.gridContainer}>
         {cards.map((card, index) => (
           <View key={index} style={styles.sensorCard}>
-            <View style={styles.cardHeader}>
-              <Text style={styles.cardIcon}>{card.icon}</Text>
-              <Text style={styles.cardTitle}>{card.title}</Text>
-            </View>
-
-            <View style={styles.valueContainerVertical}>
-              <View style={styles.valueBox}>
-                <Text style={styles.valueLabel}>목표</Text>
-                <Text style={styles.currentValue}>
-                  {thresholdIsLoading ? '로딩 중..' : card.target}
-                  <Text style={styles.unit}>{card.unit}</Text>
-                </Text>
-              </View>
-
-              <View style={styles.dividerHorizontal} />
-
-              <View style={styles.valueBox}>
-                <Text style={styles.valueLabel}>현재</Text>
-                <Text style={styles.targetValue}>
-                  {card.current}
-                  <Text style={styles.unit}>{card.unit}</Text>
-                </Text>
-              </View>
-            </View>
-
-            <View
-              style={[
-                styles.statusBar,
-                card.current >= card.target
-                  ? styles.statusGood
-                  : styles.statusWarning,
-              ]}
-            />
+            <DataCard card={card} thresholdIsLoading={thresholdIsLoading} />
           </View>
         ))}
+        <View style={styles.updateContainer}>
+          <TouchableOpacity onPress={onRefresh} activeOpacity={0.7}>
+            <Text style={[styles.updateText, styles.updateBtn]}>새로고침</Text>
+          </TouchableOpacity>
+          {lastUpdate && (
+            <Text style={styles.updateText}>마지막 업데이트: {lastUpdate}</Text>
+          )}
+        </View>
       </View>
-      {lastUpdate && (
-        <Text style={styles.updateText}>마지막 업데이트: {lastUpdate}</Text>
-      )}
     </View>
   );
 }

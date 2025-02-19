@@ -4,8 +4,9 @@ import {UPDATE_INTERVAL} from '../constants/config';
 
 export function useSensorData() {
   const [sensorData, setSensorData] = useState(null);
-  const [refreshing, setRefreshing] = useState(false);
   const [lastUpdate, setLastUpdate] = useState(null);
+
+  const [refreshing, setRefreshing] = useState(false);
 
   const updateSensorData = async () => {
     try {

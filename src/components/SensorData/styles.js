@@ -3,7 +3,7 @@ const {StyleSheet} = require('react-native');
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 32,
   },
   gridContainer: {
     flexDirection: 'row',
@@ -11,45 +11,15 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     gap: 18,
   },
-  cardHeader: {
-    flexDirection: 'row',
+  updateContainer: {
+    flex: 1,
     alignItems: 'center',
-    marginBottom: 12,
-  },
-  cardIcon: {
-    fontSize: 26,
-    marginRight: 8,
-  },
-  cardTitle: {
-    fontSize: 20,
-    fontWeight: '900',
-    color: '#333',
   },
   valueContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 12,
-  },
-  valueLabel: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 6,
-  },
-  currentValue: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#2196F3',
-  },
-  targetValue: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#4CAF50',
-  },
-  unit: {
-    fontSize: 14,
-    fontWeight: 'normal',
-    color: '#666',
   },
   divider: {
     width: 1,
@@ -74,20 +44,11 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 16,
   },
-  valueContainerVertical: {
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'stretch',
-    marginBottom: 12,
-    gap: 12,
-  },
-  valueBox: {
-    alignItems: 'center',
-  },
-  dividerHorizontal: {
-    height: 1,
-    width: '100%',
-    backgroundColor: '#E0E0E0',
+  updateBtn: {
+    backgroundColor: 'lightgrey',
+    padding: 8,
+    borderRadius: 5,
+    fontSize: 20,
   },
   sensorCard: {
     width: '47%',

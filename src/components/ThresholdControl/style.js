@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
   bottomsheetBtn: {
     backgroundColor: '#4CAF50',
     marginHorizontal: 110,
-    marginTop: 20,
+    marginBottom: 20,
     padding: 20,
     borderRadius: 10,
   },

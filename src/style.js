@@ -5,7 +5,4 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
   },
-  scrollViewContainer: {
-    padding: 16,
-  },
 });

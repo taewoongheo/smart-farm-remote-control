@@ -35,7 +35,8 @@ function ThresholdBottomSheet({threshold, updateThreshold}) {
     <BottomSheetModalProvider>
       <TouchableOpacity
         onPress={handlePresentModalPress}
-        style={styles.bottomsheetBtn}>
+        style={styles.bottomsheetBtn}
+        activeOpacity={0.7}>
         <Text style={styles.bottomsheetBtnText}>목표 값 설정</Text>
       </TouchableOpacity>
       <BottomSheetModal
