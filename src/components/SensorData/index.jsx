@@ -2,6 +2,7 @@ import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {styles} from './styles';
 import {useSensorData} from '../../hooks/useSensorData';
+import {DEFAULT_THRESHOLD} from '../../constants/defaultThreshold';
 import DataCard from './DataCard';
 
 function SensorData({threshold, thresholdIsLoading}) {
@@ -32,28 +33,28 @@ function SensorData({threshold, thresholdIsLoading}) {
       title: '온도',
       icon: '🌡️',
       current: sensorData.dht11.temperature,
-      target: threshold?.temperature || 25,
+      target: threshold?.temperature || DEFAULT_THRESHOLD.temperature,
       unit: '°C',
     },
     {
       title: '습도',
       icon: '💧',
       current: sensorData.dht11.humidity,
-      target: threshold?.humidity || 60,
+      target: threshold?.humidity || DEFAULT_THRESHOLD.humidity,
       unit: '%',
     },
     {
       title: '토양 습도',
       icon: '🌱',
       current: sensorData.soil.soilHumidity,
-      target: threshold?.soilHumidity || 70,
+      target: threshold?.soilHumidity || DEFAULT_THRESHOLD.soilHumidity,
       unit: '%',
     },
     {
       title: '조도',
       icon: '💡',
       current: sensorData.light.percentage,
-      target: threshold?.light || 50,
+      target: threshold?.light || DEFAULT_THRESHOLD.light,
       unit: '%',
     },
   ];
