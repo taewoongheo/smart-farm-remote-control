@@ -2,8 +2,7 @@ import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {styles} from './styles';
 import {useSensorData} from '../../hooks/useSensorData';
-import {DEFAULT_THRESHOLD} from '../../constants/defaultThreshold';
-import DataCard from './DataCard';
+import DataCardGrid from './DataCardGrid';
 
 function SensorData({threshold, thresholdIsLoading}) {
   const {sensorData, lastUpdate, refreshing, setRefreshing, updateSensorData} =
@@ -20,62 +19,33 @@ function SensorData({threshold, thresholdIsLoading}) {
     }
   };
 
-  if (refreshing || !sensorData) {
-    return (
-      <View>
-        <Text>로딩중.....</Text>
-      </View>
-    );
-  }
-
-  const cards = [
-    {
-      title: '온도',
-      icon: '🌡️',
-      current: sensorData.dht11.temperature,
-      target: threshold?.temperature || DEFAULT_THRESHOLD.temperature,
-      unit: '°C',
-    },
-    {
-      title: '습도',
-      icon: '💧',
-      current: sensorData.dht11.humidity,
-      target: threshold?.humidity || DEFAULT_THRESHOLD.humidity,
-      unit: '%',
-    },
-    {
-      title: '토양 습도',
-      icon: '🌱',
-      current: sensorData.soil.soilHumidity,
-      target: threshold?.soilHumidity || DEFAULT_THRESHOLD.soilHumidity,
-      unit: '%',
-    },
-    {
-      title: '조도',
-      icon: '💡',
-      current: sensorData.light.percentage,
-      target: threshold?.light || DEFAULT_THRESHOLD.light,
-      unit: '%',
-    },
-  ];
-
   return (
     <View style={styles.container}>
-      <View style={styles.gridContainer}>
-        {cards.map((card, index) => (
-          <View key={index} style={styles.sensorCard}>
-            <DataCard card={card} thresholdIsLoading={thresholdIsLoading} />
+      {sensorData === null ? (
+        <Text>센서 데이터가 없습니다</Text>
+      ) : refreshing === true ? (
+        <Text>로딩중.....</Text>
+      ) : (
+        <View style={styles.gridContainer}>
+          <DataCardGrid
+            sensorData={sensorData}
+            threshold={threshold}
+            thresholdIsLoading={thresholdIsLoading}
+          />
+          <View style={styles.updateContainer}>
+            <TouchableOpacity onPress={onRefresh} activeOpacity={0.7}>
+              <Text style={[styles.updateText, styles.updateBtn]}>
+                새로고침
+              </Text>
+            </TouchableOpacity>
+            {lastUpdate && (
+              <Text style={styles.updateText}>
+                마지막 업데이트: {lastUpdate}
+              </Text>
+            )}
           </View>
-        ))}
-        <View style={styles.updateContainer}>
-          <TouchableOpacity onPress={onRefresh} activeOpacity={0.7}>
-            <Text style={[styles.updateText, styles.updateBtn]}>새로고침</Text>
-          </TouchableOpacity>
-          {lastUpdate && (
-            <Text style={styles.updateText}>마지막 업데이트: {lastUpdate}</Text>
-          )}
         </View>
-      </View>
+      )}
     </View>
   );
 }
