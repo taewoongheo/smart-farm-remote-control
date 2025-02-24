@@ -31,12 +31,14 @@ function SensorData({threshold, thresholdIsLoading}) {
       ) : refreshing === true ? (
         <Text>로딩중.....</Text>
       ) : (
-        <View accessibilityLabel="sensordata" style={styles.gridContainer}>
-          <DataCardGrid
-            sensorData={sensorData}
-            threshold={threshold}
-            thresholdIsLoading={thresholdIsLoading}
-          />
+        <View style={styles.gridContainer}>
+          <View accessibilityLabel="센서 데이터 정보">
+            <DataCardGrid
+              sensorData={sensorData}
+              threshold={threshold}
+              thresholdIsLoading={thresholdIsLoading}
+            />
+          </View>
           <View style={styles.updateContainer}>
             <TouchableOpacity
               onPress={onRefresh}
