@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {Alert, Text, TouchableOpacity, View} from 'react-native';
 import {styles} from './styles';
 import {useSensorData} from '../../hooks/useSensorData';
 import DataCardGrid from './DataCardGrid';
@@ -13,7 +13,12 @@ function SensorData({threshold, thresholdIsLoading}) {
     try {
       await updateSensorData();
     } catch (err) {
-      console.error('센서 데이터를 가져올 수 없습니다', err);
+      Alert.alert('오류 발생', '센서 데이터를 가져올 수 없습니다', [
+        {
+          text: '확인',
+          onPress: () => console.log('Alert closed'),
+        },
+      ]);
     } finally {
       setRefreshing(false);
     }
@@ -26,20 +31,26 @@ function SensorData({threshold, thresholdIsLoading}) {
       ) : refreshing === true ? (
         <Text>로딩중.....</Text>
       ) : (
-        <View style={styles.gridContainer}>
+        <View accessibilityLabel="sensordata" style={styles.gridContainer}>
           <DataCardGrid
             sensorData={sensorData}
             threshold={threshold}
             thresholdIsLoading={thresholdIsLoading}
           />
           <View style={styles.updateContainer}>
-            <TouchableOpacity onPress={onRefresh} activeOpacity={0.7}>
+            <TouchableOpacity
+              onPress={onRefresh}
+              activeOpacity={0.7}
+              accessibilityRole="button"
+              accessibilityLabel="센서 데이터 새로고침">
               <Text style={[styles.updateText, styles.updateBtn]}>
                 새로고침
               </Text>
             </TouchableOpacity>
             {lastUpdate && (
-              <Text style={styles.updateText}>
+              <Text
+                style={styles.updateText}
+                accessibilityLabel="마지막 업데이트 정보">
                 마지막 업데이트: {lastUpdate}
               </Text>
             )}
