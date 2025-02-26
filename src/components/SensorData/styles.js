@@ -62,4 +62,7 @@ export const styles = StyleSheet.create({
     elevation: 3,
     minHeight: 180, // 세로 배치를 위한 최소 높이 설정
   },
+  dataContainer: {
+    flex: 1,
+  },
 });

@@ -13,10 +13,9 @@ function SensorData({threshold, thresholdIsLoading}) {
     try {
       await updateSensorData();
     } catch (err) {
-      Alert.alert('오류 발생', '센서 데이터를 가져올 수 없습니다', [
+      Alert.alert('오류 발생', `${err.message}`, [
         {
           text: '확인',
-          onPress: () => console.log('Alert closed'),
         },
       ]);
     } finally {
@@ -31,8 +30,10 @@ function SensorData({threshold, thresholdIsLoading}) {
       ) : refreshing === true ? (
         <Text>로딩중.....</Text>
       ) : (
-        <View style={styles.gridContainer}>
-          <View accessibilityLabel="센서 데이터 정보">
+        <View style={styles.dataContainer} accessibilityLabel="센서 데이터">
+          <View
+            style={styles.gridContainer}
+            accessibilityLabel="센서 데이터 정보">
             <DataCardGrid
               sensorData={sensorData}
               threshold={threshold}

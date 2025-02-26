@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import {fetchSensorData} from '../services/esp32';
 import {UPDATE_INTERVAL} from '../constants/config';
+import {mockSensorData} from '../constants/mockSensorData';
 
 export function useSensorData() {
   const [sensorData, setSensorData] = useState(null);
@@ -9,11 +10,14 @@ export function useSensorData() {
 
   const updateSensorData = async () => {
     try {
-      const data = await fetchSensorData();
+      let data = mockSensorData;
+      setTimeout(async () => {
+        data = await fetchSensorData();
+      }, 5000);
       setSensorData(data);
       setLastUpdate(new Date().toLocaleTimeString());
-    } catch (error) {
-      console.error('센서 데이터 fetch 에러:', error);
+    } catch (err) {
+      throw new Error(`센서 데이터를 가져올 수 없습니다: ${err.message}`);
     }
   };
 
