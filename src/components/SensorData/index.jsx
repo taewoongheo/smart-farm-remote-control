@@ -13,6 +13,7 @@ function SensorData({threshold, thresholdIsLoading}) {
     try {
       await updateSensorData();
     } catch (err) {
+      console.log(err);
       Alert.alert('오류 발생', `${err.message}`, [
         {
           text: '확인',
