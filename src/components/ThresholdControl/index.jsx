@@ -1,16 +1,19 @@
-import React, {useCallback, useRef} from 'react';
+import React, {useCallback, useRef, useMemo} from 'react';
 import {
   BottomSheetModalProvider,
-  BottomSheetView,
   BottomSheetModal,
   BottomSheetBackdrop,
+  BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
 import {Text, TouchableOpacity} from 'react-native';
 import {styles} from './style';
 import ThresholdInput from './input';
 
 function ThresholdBottomSheet({threshold, updateThreshold}) {
+  console.log(threshold);
   const bottomSheetModalRef = useRef(null);
+
+  const snapPoints = useMemo(() => ['80%'], []);
 
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
@@ -43,15 +46,18 @@ function ThresholdBottomSheet({threshold, updateThreshold}) {
         ref={bottomSheetModalRef}
         detached={true}
         style={styles.bottomsheetModal}
+        snapPoints={snapPoints}
         bottomInset={50}
         backdropComponent={renderBackdrop}
         onChange={handleSheetChanges}>
-        <BottomSheetView style={styles.bottomsheetContentContainer}>
+        <BottomSheetScrollView
+          contentCon
+          tainerStyle={styles.bottomsheetContentContainer}>
           <ThresholdInput
             threshold={threshold}
             updateThreshold={updateThreshold}
           />
-        </BottomSheetView>
+        </BottomSheetScrollView>
       </BottomSheetModal>
     </BottomSheetModalProvider>
   );

@@ -9,9 +9,13 @@ function ThresholdInput({threshold, updateThreshold}) {
 
   const [values, setValues] = useState({
     temperature: threshold.temperature?.toString() || '',
+    tempRange: threshold.tempRange?.toString() || '',
     humidity: threshold.humidity?.toString() || '',
+    humidityRange: threshold.humidityRange?.toString() || '',
     soilHumidity: threshold.soilHumidity?.toString() || '',
+    soilHumidityRange: threshold.soilHumidityRange?.toString() || '',
     light: threshold.light?.toString() || '',
+    lightRange: threshold.lightRange?.toString() || '',
   });
 
   const handleInputChange = (key, value) => {
@@ -28,6 +32,7 @@ function ThresholdInput({threshold, updateThreshold}) {
     dismiss();
   };
 
+  console.log(threshold);
   return (
     <View style={styles.inputContainer}>
       <View style={styles.inputRow}>
@@ -41,6 +46,16 @@ function ThresholdInput({threshold, updateThreshold}) {
         />
       </View>
       <View style={styles.inputRow}>
+        <Text style={styles.inputText}>온도 범위 ±°C:</Text>
+        <TextInput
+          style={styles.input}
+          value={values.tempRange}
+          onChangeText={value => handleInputChange('tempRange', value)}
+          keyboardType="numeric"
+          placeholder="온도 범위 설정"
+        />
+      </View>
+      <View style={styles.inputRow}>
         <Text style={styles.inputText}>습도 %:</Text>
         <TextInput
           style={styles.input}
@@ -48,6 +63,16 @@ function ThresholdInput({threshold, updateThreshold}) {
           onChangeText={value => handleInputChange('humidity', value)}
           keyboardType="numeric"
           placeholder="습도 설정"
+        />
+      </View>
+      <View style={styles.inputRow}>
+        <Text style={styles.inputText}>습도 범위 ±%:</Text>
+        <TextInput
+          style={styles.input}
+          value={values.humidityRange}
+          onChangeText={value => handleInputChange('humidityRange', value)}
+          keyboardType="numeric"
+          placeholder="습도 범위 설정"
         />
       </View>
       <View style={styles.inputRow}>
@@ -61,6 +86,16 @@ function ThresholdInput({threshold, updateThreshold}) {
         />
       </View>
       <View style={styles.inputRow}>
+        <Text style={styles.inputText}>토양습도 범위 ±%: </Text>
+        <TextInput
+          style={styles.input}
+          value={values.soilHumidityRange}
+          onChangeText={value => handleInputChange('soilHumidityRange', value)}
+          keyboardType="numeric"
+          placeholder="토양습도 범위 설정"
+        />
+      </View>
+      <View style={styles.inputRow}>
         <Text style={styles.inputText}>조도 %: </Text>
         <TextInput
           style={styles.input}
@@ -68,6 +103,16 @@ function ThresholdInput({threshold, updateThreshold}) {
           onChangeText={value => handleInputChange('light', value)}
           keyboardType="numeric"
           placeholder="조도 설정"
+        />
+      </View>
+      <View style={styles.inputRow}>
+        <Text style={styles.inputText}>조도 범위 ±%: </Text>
+        <TextInput
+          style={styles.input}
+          value={values.lightRange}
+          onChangeText={value => handleInputChange('lightRange', value)}
+          keyboardType="numeric"
+          placeholder="조도 범위 설정"
         />
       </View>
       <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>

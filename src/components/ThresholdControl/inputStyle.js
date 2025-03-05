@@ -2,34 +2,38 @@ import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
   inputContainer: {
-    gap: 15,
+    width: '100%',
+    paddingHorizontal: 10,
   },
   inputRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    marginBottom: 8,
   },
   input: {
+    flex: 1,
+    height: 40,
     borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 6,
-    padding: 10,
-    width: '70%',
+    borderColor: '#cccccc',
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    backgroundColor: '#ffffff',
   },
   submitButton: {
     backgroundColor: '#4CAF50',
-    padding: 20,
+    padding: 15,
     borderRadius: 8,
+    marginTop: 15,
     alignItems: 'center',
-    marginTop: 20,
+    width: '100%',
   },
   inputText: {
-    fontSize: 18,
-    fontWeight: 600,
+    flex: 1,
+    fontSize: 16,
   },
   sendText: {
-    fontSize: 20,
-    fontWeight: 700,
     color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });

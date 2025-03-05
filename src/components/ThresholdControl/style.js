@@ -5,10 +5,11 @@ export const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   bottomsheetContentContainer: {
+    backgroundColor: 'white',
     flex: 1,
-    height: 380,
-    padding: 30,
-    justifyContent: 'center',
+    padding: 15,
+    paddingBottom: 30,
+    justifyContent: 'flex-start',
     alignItems: 'center',
   },
   bottomsheetBtn: {
