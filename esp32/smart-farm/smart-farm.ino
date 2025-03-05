@@ -24,9 +24,13 @@ DHT dht(DHTPIN, DHTTYPE);
 
 // 초기 기준값 설정
 int lightThreshold = 50;
+int lightRange = 10;
 float temperatureThreshold = 25.0;
+float tempRange = 10.0;
 int humidityThreshold = 60;
+int humidityRange = 10;
 int soilHumidityThreshold = 500;
+int soilHumidityRange = 10;
 
 WebServer server(80);
 
@@ -49,7 +53,6 @@ void setup() {
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
   
-  // DHT11 센서 시작
   dht.begin();
   
   // API 엔드포인트
@@ -76,9 +79,10 @@ void handleSensorData() {
   int lightValue = analogRead(LIGHT_SENSOR_PIN);
   lightData["percentage"] = map(lightValue, 0, 4095, 0, 100);  // 0-4095를 0-100%로 변환
   
+  // 토양 센서 데이터
   JsonObject soilData = doc.createNestedObject("soil");
   int soilHumidityValue = analogRead(SOILSENSORPIN);
-  soilData["soilHumidity"] = soilHumidityValue;
+  soilData["soilHumidity"] = map(soilHumidityValue, 0, 4095, 0, 100);
 
   String response;
   serializeJson(doc, response);
@@ -89,20 +93,20 @@ void handleSensorData() {
 void handleThreshold() {
   if (server.hasArg("plain")) {
     String body = server.arg("plain");
+    Serial.println("Received body: " + body); // 디버깅 로그 
     
-    StaticJsonDocument<400> doc; // 크기를 더 크게 설정
+    StaticJsonDocument<400> doc; 
     DeserializationError error = deserializeJson(doc, body);
     
     if (!error) {
-      // 각 임계값을 개별적으로 처리
       if (doc.containsKey("light")) lightThreshold = doc["light"];
-      if (doc.containsKey('lightRange')) lightRange = doc['lightRange'];
+      if (doc.containsKey("lightRange")) lightRange = doc["lightRange"]; 
       if (doc.containsKey("temperature")) temperatureThreshold = doc["temperature"];
-      if (doc.containsKey('tempRange')) tempRange = doc['tempRange'];
+      if (doc.containsKey("tempRange")) tempRange = doc["tempRange"];
       if (doc.containsKey("humidity")) humidityThreshold = doc["humidity"];
-      if (doc.containsKey('humidityRange')) humidityRange = doc["humidityRange"];
+      if (doc.containsKey("humidityRange")) humidityRange = doc["humidityRange"]; 
       if (doc.containsKey("soilHumidity")) soilHumidityThreshold = doc["soilHumidity"];
-      if (doc.containsKey('soilHumidityRange')) soilHumidityRange = doc["soilHumidityRange"]
+      if (doc.containsKey("soilHumidityRange")) soilHumidityRange = doc["soilHumidityRange"]; 
       
       // 성공 응답
       StaticJsonDocument<100> responseDoc;
@@ -112,6 +116,12 @@ void handleThreshold() {
       String responseStr;
       serializeJson(responseDoc, responseStr);
       server.send(200, "application/json", responseStr);
+      
+      // 디버깅 로그
+      Serial.println("Updated thresholds:");
+      Serial.println("Light: " + String(lightThreshold) + " (Range: " + String(lightRange) + ")");
+      Serial.println("Soil Humidity: " + String(soilHumidityThreshold) + " (Range: " + String(soilHumidityRange) + ")");
+      Serial.println("Humidity: " + String(humidityThreshold) + " (Range: " + String(humidityRange) + ")");
     } else {
       // 에러 처리
       Serial.println("JSON parsing error: " + String(error.c_str()));
@@ -138,17 +148,36 @@ void handleThreshold() {
 void loop() {
   server.handleClient();
 
-  // LED 제어 로직
+  // 현재 센서값 읽기
   int currentLight = analogRead(LIGHT_SENSOR_PIN);
   int currentLightPercentage = map(currentLight, 0, 4095, 0, 100);
   
-  Serial.println(currentLight);
-  Serial.println(lightThreshold);
-  if (currentLightPercentage < lightThreshold) {
-    digitalWrite(LED_PIN, HIGH);  
+  float currentTemperature = dht.readTemperature();
+  float currentHumidity = dht.readHumidity();
+  
+  int currentSoilHumidity = analogRead(SOILSENSORPIN);
+  int currentSoilHumidityPercentage = map(currentSoilHumidity, 0, 4095, 0, 100); 
+  
+  // 조도 제어
+  if (currentLightPercentage < (lightThreshold - lightRange)) {
+    digitalWrite(LED_PIN, HIGH); 
+    Serial.println("LED ON: 현재 조도(" + String(currentLightPercentage) + 
+                  ")가 임계값(" + String(lightThreshold - lightRange) + ")보다 낮습니다");
   } else {
-    digitalWrite(LED_PIN, LOW);  
+    digitalWrite(LED_PIN, LOW); 
+  }
+  
+  // 토양습도 제어
+  if (currentSoilHumidityPercentage < (soilHumidityThreshold - soilHumidityRange)) {
+    Serial.println("물펌프 가동: 현재 토양습도(" + String(currentSoilHumidityPercentage) + 
+                  "%)가 임계값(" + String(soilHumidityThreshold - soilHumidityRange) + "%)보다 낮습니다");
+  }
+  
+  // 습도 제어
+  if (currentHumidity < (humidityThreshold - humidityRange)) {
+    Serial.println("가습기 가동: 현재 습도(" + String(currentHumidity) + 
+                  ")가 임계값(" + String(humidityThreshold - humidityRange) + ")보다 낮습니다");
   }
 
-  delay(100);
+  delay(1000);
 }
