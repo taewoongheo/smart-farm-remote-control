@@ -7,7 +7,14 @@ function DataCard({card, thresholdIsLoading}) {
     <View>
       <View style={styles.cardHeader}>
         <Text style={styles.cardIcon}>{card.icon}</Text>
-        <Text style={styles.cardTitle}>{card.title}</Text>
+        <View style={styles.titleContainer}>
+          <Text style={styles.cardTitle} numberOfLines={1} ellipsizeMode="tail">
+            {card.title}
+          </Text>
+          <Text style={styles.rangeText}>
+            범위: ±{card.range}{card.unit}
+          </Text>
+        </View>
       </View>
 
       <View style={styles.valueContainerVertical}>

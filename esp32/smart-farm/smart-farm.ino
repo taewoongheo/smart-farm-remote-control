@@ -96,12 +96,13 @@ void handleThreshold() {
     if (!error) {
       // 각 임계값을 개별적으로 처리
       if (doc.containsKey("light")) lightThreshold = doc["light"];
-      
+      if (doc.containsKey('lightRange')) lightRange = doc['lightRange'];
       if (doc.containsKey("temperature")) temperatureThreshold = doc["temperature"];
-      
+      if (doc.containsKey('tempRange')) tempRange = doc['tempRange'];
       if (doc.containsKey("humidity")) humidityThreshold = doc["humidity"];
-      
+      if (doc.containsKey('humidityRange')) humidityRange = doc["humidityRange"];
       if (doc.containsKey("soilHumidity")) soilHumidityThreshold = doc["soilHumidity"];
+      if (doc.containsKey('soilHumidityRange')) soilHumidityRange = doc["soilHumidityRange"]
       
       // 성공 응답
       StaticJsonDocument<100> responseDoc;

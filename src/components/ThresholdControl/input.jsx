@@ -25,9 +25,13 @@ function ThresholdInput({threshold, updateThreshold}) {
   const handleSubmit = () => {
     updateThreshold({
       temperature: Number(values.temperature),
+      tempRange: Number(values.tempRange),
       humidity: Number(values.humidity),
+      humidityRange: Number(values.humidityRange),
       soilHumidity: Number(values.soilHumidity),
+      soilHumidityRange: Number(values.soilHumidityRange),
       light: Number(values.light),
+      lightRange: Number(values.lightRange),
     });
     dismiss();
   };

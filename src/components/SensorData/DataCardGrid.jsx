@@ -14,6 +14,7 @@ function DataCardGrid({sensorData, threshold, thresholdIsLoading}) {
       icon: '🌡️',
       current: sensorData.dht11.temperature,
       target: threshold.temperature,
+      range: threshold.tempRange,
       unit: '°C',
     },
     {
@@ -21,6 +22,7 @@ function DataCardGrid({sensorData, threshold, thresholdIsLoading}) {
       icon: '💧',
       current: sensorData.dht11.humidity,
       target: threshold.humidity,
+      range: threshold.humidityRange,
       unit: '%',
     },
     {
@@ -28,6 +30,7 @@ function DataCardGrid({sensorData, threshold, thresholdIsLoading}) {
       icon: '🌱',
       current: sensorData.soil.soilHumidity,
       target: threshold.soilHumidity,
+      range: threshold.soilHumidityRange,
       unit: '%',
     },
     {
@@ -35,6 +38,7 @@ function DataCardGrid({sensorData, threshold, thresholdIsLoading}) {
       icon: '💡',
       current: sensorData.light.percentage,
       target: threshold.light,
+      range: threshold.lightRange,
       unit: '%',
     },
   ];
