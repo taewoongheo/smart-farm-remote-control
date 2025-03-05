@@ -1,9 +1,35 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import DataCard from './DataCard';
 import {styles} from './styles';
-import {Text, View} from 'react-native';
+import {Alert, Text, View} from 'react-native';
 
 function DataCardGrid({sensorData, threshold, thresholdIsLoading}) {
+  const [isAlerted, setIsAlerted] = useState(false);
+
+  useEffect(() => {
+    const temp = sensorData.dht11.temperature;
+    const tempStand = threshold.temperature;
+    const tempRange = threshold.tempRange;
+    if (temp < tempStand - tempRange) {
+      if (!isAlerted) {
+        setIsAlerted(true);
+        Alert.alert(
+          '온도 낮음',
+          `현재 온도 ${temp}가 기준치: ${tempStand}~${
+            tempStand - tempRange
+          }보다 낮습니다`,
+          [
+            {
+              text: '확인',
+            },
+          ],
+        );
+      }
+    } else {
+      setIsAlerted(false);
+    }
+  }, [sensorData, threshold]);
+
   if (threshold === undefined) {
     return <Text>목표값을 찾을 수 없습니다</Text>;
   }
