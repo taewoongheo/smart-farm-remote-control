@@ -13,7 +13,6 @@ export function useSensorData() {
       const data = await fetchSensorData();
       setSensorData(data);
       setLastUpdate(new Date().toLocaleTimeString());
-      console.log(data);
     } catch (err) {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);

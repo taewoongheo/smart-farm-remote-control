@@ -13,7 +13,6 @@ export const fetchSensorData = async () => {
 
 export const sendThreshold = async threshold => {
   if (!ESP32_IS_CONNECT) {
-    console.log('threshold: ' + threshold);
     return {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
@@ -25,7 +24,7 @@ export const sendThreshold = async threshold => {
   const response = await fetch(`http://${esp32_ip}/api/threshold`, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({lightThreshold: threshold}),
+    body: JSON.stringify(threshold),
   });
 
   return response.json();
