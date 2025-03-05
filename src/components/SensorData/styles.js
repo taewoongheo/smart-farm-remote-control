@@ -14,6 +14,7 @@ export const styles = StyleSheet.create({
   updateContainer: {
     flex: 1,
     alignItems: 'center',
+    marginTop: 10,
   },
   valueContainer: {
     flexDirection: 'row',

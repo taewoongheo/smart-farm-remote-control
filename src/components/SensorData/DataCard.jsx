@@ -7,21 +7,18 @@ function DataCard({card, thresholdIsLoading}) {
     <View>
       <View style={styles.cardHeader}>
         <Text style={styles.cardIcon}>{card.icon}</Text>
-        <View style={styles.titleContainer}>
-          <Text style={styles.cardTitle} numberOfLines={1} ellipsizeMode="tail">
-            {card.title}
-          </Text>
-          <Text style={styles.rangeText}>
-            범위: ±{card.range}{card.unit}
-          </Text>
-        </View>
+        <Text style={styles.cardTitle} numberOfLines={1} ellipsizeMode="tail">
+          {card.title}
+        </Text>
       </View>
 
       <View style={styles.valueContainerVertical}>
         <View style={styles.valueBox}>
           <Text style={styles.valueLabel}>목표</Text>
           <Text style={styles.currentValue}>
-            {thresholdIsLoading ? '로딩 중..' : card.target}
+            {thresholdIsLoading
+              ? '로딩 중..'
+              : `${card.target}~${card.target - card.range}`}
             <Text style={styles.unit}>{card.unit}</Text>
           </Text>
         </View>

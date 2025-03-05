@@ -3,7 +3,7 @@ import {StyleSheet} from 'react-native';
 export const styles = StyleSheet.create({
   cardHeader: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     marginBottom: 12,
   },
   cardIcon: {
@@ -18,6 +18,7 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '900',
     color: '#333',
+    flex: 1,
   },
   rangeText: {
     fontSize: 12,
