@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import DataCard from './DataCard';
 import {styles} from './styles';
-import {Alert, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
+import {statusAlert} from '../../../utils/alerts';
 
 function DataCardGrid({sensorData, threshold, thresholdIsLoading}) {
   const [isAlerted, setIsAlerted] = useState(false);
@@ -13,16 +14,12 @@ function DataCardGrid({sensorData, threshold, thresholdIsLoading}) {
     if (temp < tempStand - tempRange) {
       if (!isAlerted) {
         setIsAlerted(true);
-        Alert.alert(
+        statusAlert(
           '온도 낮음',
           `현재 온도 ${temp}가 기준치: ${tempStand}~${
             tempStand - tempRange
           }보다 낮습니다`,
-          [
-            {
-              text: '확인',
-            },
-          ],
+          '확인',
         );
       }
     } else {

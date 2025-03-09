@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
-import {Alert, View} from 'react-native';
+import {View} from 'react-native';
 import {styles} from './styles';
 import {useSensorData} from '../../hooks/useSensorData';
 import NoSensorData from './NoSensorData';
 import LoadingSensorData from './LoadingSensorData';
 import ShowSensorData from './ShowSensorData';
+import {errorAlert} from '../../utils/alerts';
 
 function SensorData({threshold, thresholdIsLoading}) {
   const {sensorData, updateSensorData} = useSensorData();
@@ -15,11 +16,7 @@ function SensorData({threshold, thresholdIsLoading}) {
     try {
       await updateSensorData();
     } catch (err) {
-      Alert.alert('오류 발생', `${err.message}`, [
-        {
-          text: '확인',
-        },
-      ]);
+      errorAlert('오류 발생', err.message, '확인');
     } finally {
       setRefreshing(false);
     }
