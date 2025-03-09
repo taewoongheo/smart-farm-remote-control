@@ -8,6 +8,7 @@ export const fetchSensorData = async () => {
   }
   const esp32_ip = getESP32_IP();
   const response = await fetch(`http://${esp32_ip}/api/sensors`);
+  console.log(response);
   return response.json();
 };
 

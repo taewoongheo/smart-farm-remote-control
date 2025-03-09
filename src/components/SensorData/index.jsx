@@ -1,8 +1,10 @@
 import React from 'react';
-import {Alert, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, View} from 'react-native';
 import {styles} from './styles';
 import {useSensorData} from '../../hooks/useSensorData';
-import DataCardGrid from './DataCardGrid';
+import NoSensorData from './NoSensorData';
+import LoadingSensorData from './LoadingSensorData';
+import ShowSensorData from './ShowSensorData';
 
 function SensorData({threshold, thresholdIsLoading}) {
   const {sensorData, lastUpdate, refreshing, setRefreshing, updateSensorData} =
@@ -26,39 +28,17 @@ function SensorData({threshold, thresholdIsLoading}) {
   return (
     <View style={styles.container}>
       {sensorData === null ? (
-        <Text>센서 데이터가 없습니다</Text>
+        <NoSensorData />
       ) : refreshing === true ? (
-        <Text>로딩중.....</Text>
+        <LoadingSensorData />
       ) : (
-        <View style={styles.dataContainer} accessibilityLabel="센서 데이터">
-          <View
-            style={styles.gridContainer}
-            accessibilityLabel="센서 데이터 정보">
-            <DataCardGrid
-              sensorData={sensorData}
-              threshold={threshold}
-              thresholdIsLoading={thresholdIsLoading}
-            />
-          </View>
-          <View style={styles.updateContainer}>
-            <TouchableOpacity
-              onPress={onRefresh}
-              activeOpacity={0.7}
-              accessibilityRole="button"
-              accessibilityLabel="센서 데이터 새로고침">
-              <Text style={[styles.updateText, styles.updateBtn]}>
-                새로고침
-              </Text>
-            </TouchableOpacity>
-            {lastUpdate && (
-              <Text
-                style={styles.updateText}
-                accessibilityLabel="마지막 업데이트 정보">
-                마지막 업데이트: {lastUpdate}
-              </Text>
-            )}
-          </View>
-        </View>
+        <ShowSensorData
+          sensorData={sensorData}
+          threshold={threshold}
+          thresholdIsLoading={thresholdIsLoading}
+          onRefresh={onRefresh}
+          lastUpdate={lastUpdate}
+        />
       )}
     </View>
   );

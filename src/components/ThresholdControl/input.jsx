@@ -36,7 +36,6 @@ function ThresholdInput({threshold, updateThreshold}) {
     dismiss();
   };
 
-  console.log(threshold);
   return (
     <View style={styles.inputContainer}>
       <View style={styles.inputRow}>
