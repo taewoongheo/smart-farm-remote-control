@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Alert, View} from 'react-native';
 import {styles} from './styles';
 import {useSensorData} from '../../hooks/useSensorData';
@@ -7,8 +7,8 @@ import LoadingSensorData from './LoadingSensorData';
 import ShowSensorData from './ShowSensorData';
 
 function SensorData({threshold, thresholdIsLoading}) {
-  const {sensorData, lastUpdate, refreshing, setRefreshing, updateSensorData} =
-    useSensorData();
+  const {sensorData, lastUpdate, updateSensorData} = useSensorData();
+  const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = async () => {
     setRefreshing(true);
