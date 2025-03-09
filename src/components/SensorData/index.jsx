@@ -7,7 +7,7 @@ import LoadingSensorData from './LoadingSensorData';
 import ShowSensorData from './ShowSensorData';
 
 function SensorData({threshold, thresholdIsLoading}) {
-  const {sensorData, lastUpdate, updateSensorData} = useSensorData();
+  const {sensorData, updateSensorData} = useSensorData();
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = async () => {
@@ -37,7 +37,6 @@ function SensorData({threshold, thresholdIsLoading}) {
           threshold={threshold}
           thresholdIsLoading={thresholdIsLoading}
           onRefresh={onRefresh}
-          lastUpdate={lastUpdate}
         />
       )}
     </View>

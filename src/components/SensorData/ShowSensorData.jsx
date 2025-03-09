@@ -8,7 +8,6 @@ function ShowSensorData({
   threshold,
   thresholdIsLoading,
   onRefresh,
-  lastUpdate,
 }) {
   return (
     <View style={styles.dataContainer} accessibilityLabel="센서 데이터">
@@ -27,13 +26,11 @@ function ShowSensorData({
           accessibilityLabel="센서 데이터 새로고침">
           <Text style={[styles.updateText, styles.updateBtn]}>새로고침</Text>
         </TouchableOpacity>
-        {lastUpdate && (
-          <Text
-            style={styles.updateText}
-            accessibilityLabel="마지막 업데이트 정보">
-            마지막 업데이트: {lastUpdate}
-          </Text>
-        )}
+        <Text
+          style={styles.updateText}
+          accessibilityLabel="마지막 업데이트 정보">
+          마지막 업데이트: {sensorData.lastUpdate}
+        </Text>
       </View>
     </View>
   );

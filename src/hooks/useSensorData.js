@@ -4,14 +4,15 @@ import {UPDATE_INTERVAL} from '../constants/config';
 
 export function useSensorData() {
   const [sensorData, setSensorData] = useState(null);
-  const [lastUpdate, setLastUpdate] = useState(null);
   const intervalRef = useRef(null);
 
   const updateSensorData = async () => {
     try {
       const data = await fetchSensorData();
-      setSensorData(data);
-      setLastUpdate(new Date().toLocaleTimeString());
+      setSensorData({
+        ...data,
+        lastUpdate: new Date().toLocaleTimeString(),
+      });
     } catch (err) {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
@@ -33,7 +34,6 @@ export function useSensorData() {
 
   return {
     sensorData,
-    lastUpdate,
     updateSensorData,
   };
 }
