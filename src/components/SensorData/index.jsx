@@ -6,6 +6,7 @@ import NoSensorData from './NoSensorData';
 import LoadingSensorData from './LoadingSensorData';
 import ShowSensorData from './ShowSensorData';
 import {errorAlert} from '../../utils/alerts';
+import {ALERT_MESSAGES} from '../../constants/messages';
 
 function SensorData({threshold, thresholdIsLoading}) {
   const {sensorData, updateSensorData} = useSensorData();
@@ -16,7 +17,11 @@ function SensorData({threshold, thresholdIsLoading}) {
     try {
       await updateSensorData();
     } catch (err) {
-      errorAlert('오류 발생', err.message, '확인');
+      errorAlert(
+        ALERT_MESSAGES.ERROR.TITLE,
+        err.message,
+        ALERT_MESSAGES.ERROR.CONFIRM,
+      );
     } finally {
       setRefreshing(false);
     }
