@@ -1,4 +1,6 @@
-export const ALERT_MESSAGES = Object.freeze({
+import deepFreeze from '../utils/freeze';
+
+export const ALERT_MESSAGES = deepFreeze({
   ERROR: {
     TITLE: '오류 발생',
     CONFIRM: '확인',
