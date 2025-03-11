@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import DataCard from './DataCard';
 import {styles} from './styles';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
 import {statusAlert} from '../../../utils/alerts';
 import {ALERT_MESSAGES} from '../../../constants/messages';
 
@@ -17,7 +17,20 @@ function DataCardGrid({sensorData, threshold, thresholdIsLoading}) {
         setIsAlerted(true);
         statusAlert(
           ALERT_MESSAGES.STATUS_CHANGE.TEMPERATURE.LOW,
-          ALERT_MESSAGES.STATUS_CHANGE.TEMPERATURE.MESSAGE(
+          ALERT_MESSAGES.STATUS_CHANGE.TEMPERATURE.LOW_TEMPERATURE_MESSAGE(
+            temperature,
+            temperatureTarget,
+            temperatureRange,
+          ),
+          ALERT_MESSAGES.STATUS_CHANGE.TEMPERATURE.CONFIRM,
+        );
+      }
+    } else if (temperature > temperatureTarget + temperatureRange) {
+      if (!isAlerted) {
+        setIsAlerted(true);
+        statusAlert(
+          ALERT_MESSAGES.STATUS_CHANGE.TEMPERATURE.HIGH,
+          ALERT_MESSAGES.STATUS_CHANGE.TEMPERATURE.HIGH_TEMPERATURE_MESSAGE(
             temperature,
             temperatureTarget,
             temperatureRange,
@@ -29,10 +42,6 @@ function DataCardGrid({sensorData, threshold, thresholdIsLoading}) {
       setIsAlerted(false);
     }
   }, [sensorData, threshold]);
-
-  if (threshold === undefined) {
-    return <Text>목표값을 찾을 수 없습니다</Text>;
-  }
 
   const cards = [
     {

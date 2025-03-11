@@ -8,9 +8,14 @@ export const ALERT_MESSAGES = deepFreeze({
   STATUS_CHANGE: {
     TEMPERATURE: {
       LOW: '온도 낮음',
-      MESSAGE(currentTemperature, target, range) {
+      LOW_TEMPERATURE_MESSAGE(currentTemperature, target, range) {
         return `현재 온도 ${currentTemperature}가 
         기준치: ${target + range}~${target - range} 보다 낮습니다`;
+      },
+      HIGH: '온도 높음',
+      HIGH_TEMPERATURE_MESSAGE(currentTemperature, target, range) {
+        return `현재 온도 ${currentTemperature}가 
+        기준치: ${target + range}~${target - range} 보다 높습니다`;
       },
       CONFIRM: '확인',
     },
