@@ -1,48 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import DataCard from './DataCard';
 import {styles} from './styles';
 import {View} from 'react-native';
-import {statusAlert} from '../../../utils/alerts';
-import {ALERT_MESSAGES} from '../../../constants/messages';
+import SensorDataAlert from './SensorDataAlert';
 
 function DataCardGrid({sensorData, threshold, thresholdIsLoading}) {
-  const [isAlerted, setIsAlerted] = useState(false);
-
-  useEffect(() => {
-    const temperature = sensorData.dht11.temperature;
-    const temperatureTarget = threshold.temperature;
-    const temperatureRange = threshold.tempRange;
-    if (temperature < temperatureTarget - temperatureRange) {
-      if (!isAlerted) {
-        setIsAlerted(true);
-        statusAlert(
-          ALERT_MESSAGES.STATUS_CHANGE.TEMPERATURE.LOW,
-          ALERT_MESSAGES.STATUS_CHANGE.TEMPERATURE.LOW_TEMPERATURE_MESSAGE(
-            temperature,
-            temperatureTarget,
-            temperatureRange,
-          ),
-          ALERT_MESSAGES.STATUS_CHANGE.TEMPERATURE.CONFIRM,
-        );
-      }
-    } else if (temperature > temperatureTarget + temperatureRange) {
-      if (!isAlerted) {
-        setIsAlerted(true);
-        statusAlert(
-          ALERT_MESSAGES.STATUS_CHANGE.TEMPERATURE.HIGH,
-          ALERT_MESSAGES.STATUS_CHANGE.TEMPERATURE.HIGH_TEMPERATURE_MESSAGE(
-            temperature,
-            temperatureTarget,
-            temperatureRange,
-          ),
-          ALERT_MESSAGES.STATUS_CHANGE.TEMPERATURE.CONFIRM,
-        );
-      }
-    } else {
-      setIsAlerted(false);
-    }
-  }, [sensorData, threshold]);
-
   const cards = [
     {
       title: '온도',
@@ -79,13 +41,13 @@ function DataCardGrid({sensorData, threshold, thresholdIsLoading}) {
   ];
 
   return (
-    <>
+    <SensorDataAlert sensorData={sensorData} threshold={threshold}>
       {cards.map((card, index) => (
         <View key={index} style={styles.sensorCard}>
           <DataCard card={card} thresholdIsLoading={thresholdIsLoading} />
         </View>
       ))}
-    </>
+    </SensorDataAlert>
   );
 }
 
