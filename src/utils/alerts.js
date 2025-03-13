@@ -1,17 +1,17 @@
 import {Alert} from 'react-native';
 
-function showAlert(title, message, text) {
+function showAlert(title, message, confirm) {
   Alert.alert(`${title}`, `${message}`, [
     {
-      text: `${text}`,
+      text: `${confirm}`,
     },
   ]);
 }
 
-export function errorAlert(title, message, text) {
-  return showAlert(title, message, text);
+export function errorAlert({title, message, confirm}) {
+  return showAlert(title, message, confirm);
 }
 
-export function statusAlert(title, message, text) {
-  return showAlert(title, message, text);
+export function statusAlert({title, message, confirm}) {
+  return showAlert(title, message, confirm);
 }

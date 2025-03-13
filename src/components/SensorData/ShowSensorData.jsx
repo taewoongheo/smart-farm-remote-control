@@ -17,11 +17,11 @@ function ShowSensorData({
     try {
       await updateSensorData();
     } catch (err) {
-      errorAlert(
-        ALERT_MESSAGES.ERROR.TITLE,
-        err.message,
-        ALERT_MESSAGES.ERROR.CONFIRM,
-      );
+      errorAlert({
+        title: ALERT_MESSAGES.ERROR.TITLE,
+        message: err.message,
+        confirm: ALERT_MESSAGES.ERROR.CONFIRM,
+      });
     } finally {
       setRefreshing(false);
     }

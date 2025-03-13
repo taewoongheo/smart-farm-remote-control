@@ -19,29 +19,31 @@ function SensorDataAlert(props) {
       temperatureStatus !== TEMPERATURE_STATUS.HIGH
     ) {
       setTemperatureStatus(TEMPERATURE_STATUS.HIGH);
-      statusAlert(
-        ALERT_MESSAGES.STATUS_CHANGE.TEMPERATURE.LOW,
-        ALERT_MESSAGES.STATUS_CHANGE.TEMPERATURE.LOW_TEMPERATURE_MESSAGE(
-          temperature,
-          temperatureTarget,
-          temperatureRange,
-        ),
-        ALERT_MESSAGES.STATUS_CHANGE.TEMPERATURE.CONFIRM,
-      );
+      statusAlert({
+        title: ALERT_MESSAGES.STATUS_CHANGE.TEMPERATURE.LOW,
+        message:
+          ALERT_MESSAGES.STATUS_CHANGE.TEMPERATURE.LOW_TEMPERATURE_MESSAGE(
+            temperature,
+            temperatureTarget,
+            temperatureRange,
+          ),
+        confirm: ALERT_MESSAGES.STATUS_CHANGE.TEMPERATURE.CONFIRM,
+      });
     } else if (
       temperature > temperatureTarget + temperatureRange &&
       temperatureStatus !== TEMPERATURE_STATUS.LOW
     ) {
       setTemperatureStatus(TEMPERATURE_STATUS.LOW);
-      statusAlert(
-        ALERT_MESSAGES.STATUS_CHANGE.TEMPERATURE.HIGH,
-        ALERT_MESSAGES.STATUS_CHANGE.TEMPERATURE.HIGH_TEMPERATURE_MESSAGE(
-          temperature,
-          temperatureTarget,
-          temperatureRange,
-        ),
-        ALERT_MESSAGES.STATUS_CHANGE.TEMPERATURE.CONFIRM,
-      );
+      statusAlert({
+        title: ALERT_MESSAGES.STATUS_CHANGE.TEMPERATURE.HIGH,
+        message:
+          ALERT_MESSAGES.STATUS_CHANGE.TEMPERATURE.HIGH_TEMPERATURE_MESSAGE(
+            temperature,
+            temperatureTarget,
+            temperatureRange,
+          ),
+        confirm: ALERT_MESSAGES.STATUS_CHANGE.TEMPERATURE.CONFIRM,
+      });
     } else {
       setTemperatureStatus(TEMPERATURE_STATUS.NORMAL);
     }
