@@ -19,11 +19,14 @@ DHT dht(DHTPIN, DHTTYPE);
 // 빛 감지 센서
 #define LIGHT_SENSOR_PIN 34
 
+// LED 모듈
+#define LED_PIN 4
+
 // 토양 습도 센서
 #define SOILSENSORPIN 33
 
-// LED 모듈
-#define LED_PIN 4
+// 가습기 모듈
+#define HUM_PIN 12
 
 // 초기 기준값 설정
 int lightThreshold = 50;
@@ -48,6 +51,9 @@ void setup() {
 
   // 펜 모듈 설정
   pinMode(FAN_PIN, OUTPUT);
+
+  // 가습기 모듈 설정
+  pinMode(HUM_PIN, OUTPUT);
   
   // WiFi 연결
   WiFi.begin(ssid, password);
@@ -173,8 +179,9 @@ void loop() {
   
   // 토양습도 제어
   if (currentSoilHumidityPercentage < (soilHumidityThreshold - soilHumidityRange)) {
-    Serial.println("물펌프 가동: 현재 토양습도(" + String(currentSoilHumidityPercentage) + 
-                  "%)가 임계값(" + String(soilHumidityThreshold - soilHumidityRange) + "%)보다 낮습니다");
+    digitalWrite(HUM_PIN, HIGH);
+  } else {
+    digitalWrite(HUM_PIN, LOW);
   }
   
   // 습도 제어
