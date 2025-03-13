@@ -13,6 +13,9 @@ const char* password = WIFI_PASSWORD;
 #define DHTTYPE DHT11
 DHT dht(DHTPIN, DHTTYPE);
 
+// 펜 모듈
+#define FAN_PIN 15
+
 // 빛 감지 센서
 #define LIGHT_SENSOR_PIN 34
 
@@ -42,6 +45,9 @@ void setup() {
 
   // LED 모듈 설정
   pinMode(LED_PIN, OUTPUT);
+
+  // 펜 모듈 설정
+  pinMode(FAN_PIN, OUTPUT);
   
   // WiFi 연결
   WiFi.begin(ssid, password);
@@ -161,8 +167,6 @@ void loop() {
   // 조도 제어
   if (currentLightPercentage < (lightThreshold - lightRange)) {
     digitalWrite(LED_PIN, HIGH); 
-    Serial.println("LED ON: 현재 조도(" + String(currentLightPercentage) + 
-                  ")가 임계값(" + String(lightThreshold - lightRange) + ")보다 낮습니다");
   } else {
     digitalWrite(LED_PIN, LOW); 
   }
@@ -174,9 +178,10 @@ void loop() {
   }
   
   // 습도 제어
-  if (currentHumidity < (humidityThreshold - humidityRange)) {
-    Serial.println("가습기 가동: 현재 습도(" + String(currentHumidity) + 
-                  ")가 임계값(" + String(humidityThreshold - humidityRange) + ")보다 낮습니다");
+  if (currentHumidity > humidityThreshold) {
+    digitalWrite(FAN_PIN, HIGH);
+  } else {
+    digitalWrite(FAN_PIN, LOW);
   }
 
   delay(1000);
