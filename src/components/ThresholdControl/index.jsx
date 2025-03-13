@@ -10,7 +10,6 @@ import {styles} from './style';
 import ThresholdInput from './input';
 
 function ThresholdBottomSheet({threshold, updateThreshold}) {
-  console.log(threshold);
   const bottomSheetModalRef = useRef(null);
 
   const snapPoints = useMemo(() => ['80%'], []);

@@ -2,13 +2,31 @@ import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import DataCardGrid from './DataCardGrid';
 import {styles} from './styles';
+import {errorAlert} from '../../utils/alerts';
+import {ALERT_MESSAGES} from '../../constants/messages';
 
 function ShowSensorData({
   sensorData,
   threshold,
   thresholdIsLoading,
-  onRefresh,
+  updateSensorData,
+  setRefreshing,
 }) {
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await updateSensorData();
+    } catch (err) {
+      errorAlert(
+        ALERT_MESSAGES.ERROR.TITLE,
+        err.message,
+        ALERT_MESSAGES.ERROR.CONFIRM,
+      );
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   return (
     <View style={styles.dataContainer} accessibilityLabel="센서 데이터">
       <View style={styles.gridContainer} accessibilityLabel="센서 데이터 정보">
