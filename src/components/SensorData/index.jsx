@@ -5,9 +5,13 @@ import {useSensorData} from '../../hooks/useSensorData';
 import NoSensorData from './NoSensorData';
 import LoadingSensorData from './LoadingSensorData';
 import ShowSensorData from './ShowSensorData';
+import {UPDATE_INTERVAL} from '../../constants/config';
 
 function SensorData({threshold, thresholdIsLoading}) {
-  const {sensorData, updateSensorData} = useSensorData();
+  const {sensorData, updateSensorData} = useSensorData({
+    autoUpdate: true,
+    interval: UPDATE_INTERVAL,
+  });
   const [refreshing, setRefreshing] = useState(false);
 
   return (
