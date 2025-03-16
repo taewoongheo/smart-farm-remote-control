@@ -1,11 +1,7 @@
 import {useEffect, useRef, useState} from 'react';
 import {fetchSensorData} from '../services/esp32';
-import {UPDATE_INTERVAL} from '../constants/config';
 
-export function useSensorData({
-  autoUpdate = false,
-  interval = UPDATE_INTERVAL,
-} = {}) {
+export function useSensorData({autoUpdate, interval}) {
   const [sensorData, setSensorData] = useState(null);
   const intervalRef = useRef(null);
 

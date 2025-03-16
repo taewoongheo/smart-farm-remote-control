@@ -78,4 +78,4 @@ yarn-error.log
 .env.d.ts
 
 # esp32
-/esp32/smart-farm/WiFiSecrets.h
+/esp32/smart-farm/security/
