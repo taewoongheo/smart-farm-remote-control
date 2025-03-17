@@ -8,6 +8,7 @@ export function useSensorData({autoUpdate, interval}) {
   const updateSensorData = async () => {
     try {
       const data = await fetchSensorData();
+      console.log(data);
       setSensorData({
         ...data,
         lastUpdate: new Date().toLocaleTimeString(),
