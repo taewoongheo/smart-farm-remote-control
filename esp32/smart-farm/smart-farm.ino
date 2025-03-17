@@ -27,7 +27,15 @@ FirebaseConfig config;
 FirebaseJson json;
 bool signupOK = false;
 unsigned long sendDataPrevMillis = 0;
-const int dataInterval = 5000; // 5초마다 데이터 전송
+unsigned long getThresholdsPrevMillis = 0;
+const int dataInterval = 5000; 
+const int thresholdsInterval = 5000; 
+
+// 센서 값 전역 변수
+float temperature;
+float humidity;
+int lightPercentage;
+int soilHumidityPercentage;
 
 // 초기 기준값 설정
 int lightThreshold = 50;
@@ -38,6 +46,29 @@ int humidityThreshold = 60;
 int humidityRange = 10;
 int soilHumidityThreshold = 50;
 int soilHumidityRange = 10;
+
+// 기본 한계값 설정 함수
+void setupDefaultThresholds() {
+  if (Firebase.ready() && signupOK) {
+    Serial.println("기본 한계값 설정 중...");
+    
+    json.clear();
+    json.set("temperature", temperatureThreshold);
+    json.set("tempRange", tempRange);
+    json.set("humidity", humidityThreshold);
+    json.set("humidityRange", humidityRange);
+    json.set("soilHumidity", soilHumidityThreshold);
+    json.set("soilHumidityRange", soilHumidityRange);
+    json.set("light", lightThreshold);
+    json.set("lightRange", lightRange);
+    
+    if (Firebase.RTDB.setJSON(&firebaseData, "/thresholds", &json)) {
+      Serial.println("기본 한계값 설정 성공");
+    } else {
+      Serial.println("기본 한계값 설정 실패: " + firebaseData.errorReason());
+    }
+  }
+}
 
 void setup_wifi() {
   delay(10);
@@ -87,21 +118,112 @@ void setup() {
   Firebase.begin(&config, &auth);
   Firebase.reconnectWiFi(true);
   firebaseData.setResponseSize(4096);
+  
+  // 초기 한계값 설정 시도
+  if (Firebase.ready() && signupOK) {
+    getThresholds();
+  }
+}
+
+// 한계값 읽기 함수
+void getThresholds() {
+  if (Firebase.ready() && signupOK) {
+    Serial.println("\n한계값 읽기 시도...");
+    
+    if (Firebase.RTDB.getJSON(&firebaseData, "/thresholds")) {
+      Serial.println("한계값 데이터 수신 성공");
+      
+      FirebaseJson &json = firebaseData.jsonObject();
+      FirebaseJsonData result;
+      
+      // 온도 한계값 읽기
+      json.get(result, "temperature");
+      if (result.success) {
+        temperatureThreshold = result.floatValue;
+        Serial.println("온도 한계값: " + String(temperatureThreshold));
+      }
+      
+      // 온도 범위 읽기
+      json.get(result, "tempRange");
+      if (result.success) {
+        tempRange = result.floatValue;
+        Serial.println("온도 범위: " + String(tempRange));
+      }
+      
+      // 습도 한계값 읽기
+      json.get(result, "humidity");
+      if (result.success) {
+        humidityThreshold = result.intValue;
+        Serial.println("습도 한계값: " + String(humidityThreshold));
+      }
+      
+      // 습도 범위 읽기
+      json.get(result, "humidityRange");
+      if (result.success) {
+        humidityRange = result.intValue;
+        Serial.println("습도 범위: " + String(humidityRange));
+      }
+      
+      // 토양 습도 한계값 읽기
+      json.get(result, "soilHumidity");
+      if (result.success) {
+        soilHumidityThreshold = result.intValue;
+        Serial.println("토양 습도 한계값: " + String(soilHumidityThreshold));
+      }
+      
+      // 토양 습도 범위 읽기
+      json.get(result, "soilHumidityRange");
+      if (result.success) {
+        soilHumidityRange = result.intValue;
+        Serial.println("토양 습도 범위: " + String(soilHumidityRange));
+      }
+      
+      // 조도 한계값 읽기
+      json.get(result, "light");
+      if (result.success) {
+        lightThreshold = result.intValue;
+        Serial.println("조도 한계값: " + String(lightThreshold));
+      }
+      
+      // 조도 범위 읽기
+      json.get(result, "lightRange");
+      if (result.success) {
+        lightRange = result.intValue;
+        Serial.println("조도 범위: " + String(lightRange));
+      }
+      
+      // 한계값 요약 출력
+      Serial.println("\n===== 현재 한계값 설정 =====");
+      Serial.println("조도: " + String(lightThreshold) + "% (범위: ±" + String(lightRange) + "%)");
+      Serial.println("온도: " + String(temperatureThreshold) + "°C (범위: ±" + String(tempRange) + "°C)");
+      Serial.println("습도: " + String(humidityThreshold) + "% (범위: ±" + String(humidityRange) + "%)");
+      Serial.println("토양습도: " + String(soilHumidityThreshold) + "% (범위: ±" + String(soilHumidityRange) + "%)");
+      Serial.println("==============================");
+      
+    } else {
+      Serial.println("한계값 데이터 수신 실패: " + firebaseData.errorReason());
+      // 데이터가 없는 경우 기본값 설정
+      if (firebaseData.errorReason() == "path not exist") {
+        setupDefaultThresholds();
+      }
+    }
+  }
 }
 
 void loop() {
+  // 센서 데이터 읽기 및 전송
   if (Firebase.ready() && signupOK && (millis() - sendDataPrevMillis > dataInterval || sendDataPrevMillis == 0)) {
     sendDataPrevMillis = millis();
     
     // 센서 데이터 읽기
-    float temperature = dht.readTemperature();
-    float humidity = dht.readHumidity();
+    temperature = dht.readTemperature();
+    humidity = dht.readHumidity();
     
     int lightValue = analogRead(LIGHT_SENSOR_PIN);
-    int lightPercentage = map(lightValue, 0, 4095, 0, 100);
+    lightPercentage = map(lightValue, 0, 4095, 0, 100);
     
     int soilValue = analogRead(SOILSENSORPIN);
-    int soilHumidityPercentage = map(soilValue, 0, 4095, 0, 100);
+    soilHumidityPercentage = map(soilValue, 0, 4095, 0, 100);
     
     // DHT11(온도, 습도) 데이터 전송
     json.clear();
@@ -141,26 +263,39 @@ void loop() {
     Serial.println("습도: " + String(humidity) + "%");
     Serial.println("토양습도: " + String(soilHumidityPercentage) + "%");
     Serial.println("==============================");
-
+    
+    // 모듈 제어 로직
     // 조도 제어
     if (lightPercentage < (lightThreshold - lightRange)) {
+      Serial.println("LED 켜짐");
       digitalWrite(LED_PIN, HIGH); 
     } else {
+      Serial.println("LED 꺼짐");
       digitalWrite(LED_PIN, LOW); 
     }
     
     // 토양습도 제어
     if (soilHumidityPercentage < (soilHumidityThreshold - soilHumidityRange)) {
+      Serial.println("가습기 동작");
       digitalWrite(HUM_PIN, HIGH);
     } else {
+      Serial.println("가습기 멈춤");
       digitalWrite(HUM_PIN, LOW);
     }
     
     // 습도 제어
     if (humidity > humidityThreshold) {
+      Serial.println("팬 동작");
       digitalWrite(FAN_PIN, HIGH);
     } else {
+      Serial.println("팬 멈춤");
       digitalWrite(FAN_PIN, LOW);
     }
+  }
+
+  // 한계값 주기적으로 확인
+  if (Firebase.ready() && signupOK && (millis() - getThresholdsPrevMillis > thresholdsInterval || getThresholdsPrevMillis == 0)) {
+    getThresholdsPrevMillis = millis();
+    getThresholds();
   }
 }
