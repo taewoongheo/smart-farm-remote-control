@@ -79,3 +79,6 @@ yarn-error.log
 
 # esp32
 /esp32/smart-farm/security/
+
+# firebase
+/ios/GoogleService-info.plist
