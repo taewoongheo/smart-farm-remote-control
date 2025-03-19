@@ -25,7 +25,7 @@ function DataCardGrid({sensorData, threshold, thresholdIsLoading}) {
     {
       title: '토양 습도',
       icon: '🌱',
-      current: sensorData.soil.soilHumidity,
+      current: sensorData.soil.humidity,
       target: threshold.soilHumidity,
       range: threshold.soilHumidityRange,
       unit: '%',

@@ -4,7 +4,7 @@ export const mockSensorData = {
     humidity: 60,
   },
   soil: {
-    soilHumidity: 75,
+    humidity: 75,
   },
   light: {
     percentage: 30,

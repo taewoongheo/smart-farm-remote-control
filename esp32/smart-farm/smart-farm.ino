@@ -18,7 +18,7 @@ DHT dht(DHTPIN, DHTTYPE);
 #define LIGHT_SENSOR_PIN 34 // 빛 감지 센서
 #define LED_PIN 4 // LED 모듈
 #define SOILSENSORPIN 33 // 토양 습도 센서
-#define HUM_PIN 12 // 가습기 모듈
+#define HUM_PIN 13 // 가습기 모듈
 
 // Firebase 객체 생성
 FirebaseData firebaseData;

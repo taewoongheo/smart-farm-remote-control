@@ -1,32 +1,38 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {styles} from './styles';
-import {useSensorData} from '../../hooks/useSensorData';
 import NoSensorData from './NoSensorData';
-import LoadingSensorData from './LoadingSensorData';
 import ShowSensorData from './ShowSensorData';
-import {UPDATE_INTERVAL} from '../../constants/config';
+import {firebase} from '@react-native-firebase/database';
 
 function SensorData({threshold, thresholdIsLoading}) {
-  const {sensorData, updateSensorData} = useSensorData({
-    autoUpdate: true,
-    interval: UPDATE_INTERVAL,
-  });
-  const [refreshing, setRefreshing] = useState(false);
+  const [sensorData, setSensorData] = useState(null);
+
+  useEffect(() => {
+    const onValueChange = firebase
+      .app()
+      .database()
+      .ref('/sensorData')
+      .on('value', snapshot => {
+        setSensorData({
+          ...snapshot.val(),
+          lastUpdate: new Date().toLocaleTimeString(),
+        });
+      });
+
+    return () =>
+      firebase.app().database.ref('/sensorData').off('value', onValueChange);
+  }, []);
 
   return (
     <View style={styles.container}>
       {sensorData === null ? (
         <NoSensorData />
-      ) : refreshing === true ? (
-        <LoadingSensorData />
       ) : (
         <ShowSensorData
           sensorData={sensorData}
           threshold={threshold}
           thresholdIsLoading={thresholdIsLoading}
-          updateSensorData={updateSensorData}
-          setRefreshing={setRefreshing}
         />
       )}
     </View>
