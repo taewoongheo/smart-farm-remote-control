@@ -1,32 +1,34 @@
-import React, {useEffect} from 'react';
-import {Alert, SafeAreaView} from 'react-native';
-import SensorData from './components/SensorData';
+import React from 'react';
+import {SafeAreaView} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import ThresholdBottomSheet from './components/ThresholdControl';
-import {useThreshold} from './hooks/useThreshold';
 import {styles} from './style';
+import Main from './Main';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import CropInfo from './pages/CropInfo/CropInfo';
+
+const Stack = createNativeStackNavigator();
 
 function App() {
-  const {threshold, updateThreshold, isLoading, error} = useThreshold();
-
-  useEffect(() => {
-    if (error) {
-      Alert.alert('Error', error);
-    }
-  }, [error]);
-
   return (
-    <GestureHandlerRootView>
-      <SafeAreaView style={styles.container}>
-        <SensorData threshold={threshold} thresholdIsLoading={isLoading} />
-
-        {/* bottom sheet modal */}
-        <ThresholdBottomSheet
-          threshold={threshold}
-          updateThreshold={updateThreshold}
-        />
-      </SafeAreaView>
-    </GestureHandlerRootView>
+    <NavigationContainer>
+      <GestureHandlerRootView>
+        <SafeAreaView style={styles.container}>
+          <Stack.Navigator initialRouteName="Main">
+            <Stack.Screen
+              name="Main"
+              component={Main}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="CropInfo"
+              component={CropInfo}
+              options={{headerShown: false}}
+            />
+          </Stack.Navigator>
+        </SafeAreaView>
+      </GestureHandlerRootView>
+    </NavigationContainer>
   );
 }
 
