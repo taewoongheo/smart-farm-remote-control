@@ -8,22 +8,45 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {URL} from '../../../env';
-import {tomato} from '../../constants/farmInfo';
+import {PAPRIKA, STRAWBERRY, TOMATO} from '../../constants/farmInfo';
 import {styles} from './styles';
+import DropdownComponent from './dropDown';
 
 function CropInfo() {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [crop, setCrop] = useState([]);
 
+  const [value, setValue] = useState(null);
+
   useEffect(() => {
     setLoading(true);
+    let cropArr = null;
+
+    if (value === null) {
+      setLoading(false);
+      return;
+    }
 
     const fetchUrl = async () => {
       try {
         const result = [];
-        const fetchArr = tomato.map(code => fetch(URL + code));
-        await Promise.all(fetchArr)
+
+        switch (value) {
+          case '토마토': {
+            cropArr = TOMATO.map(code => fetch(URL + code));
+            break;
+          }
+          case '딸기': {
+            cropArr = STRAWBERRY.map(code => fetch(URL + code));
+            break;
+          }
+          case '파프리카': {
+            cropArr = PAPRIKA.map(code => fetch(URL + code));
+          }
+        }
+
+        await Promise.all(cropArr)
           .then(response => Promise.all(response.map(r => r.json())))
           .then(data => {
             for (let i = 0; i < data.length; i++) {
@@ -51,7 +74,7 @@ function CropInfo() {
     };
 
     fetchUrl();
-  }, []);
+  }, [value]);
 
   const renderTableHeader = () => {
     return (
@@ -87,7 +110,10 @@ function CropInfo() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>작물 정보</Text>
+      <DropdownComponent value={value} setValue={setValue} />
+      <Text style={styles.title}>
+        {value ? `농가별 ${value} 최적 생육 정보 예시` : ''}
+      </Text>
 
       {crop && crop.length > 0 ? (
         <View style={styles.tableContainer}>

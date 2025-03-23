@@ -5,7 +5,7 @@ import {styles} from './style';
 import Main from './Main';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import CropInfo from './pages/CropInfo/CropInfo';
+import CropInfo from './pages/CropInfo/index';
 
 const Stack = createNativeStackNavigator();
 
