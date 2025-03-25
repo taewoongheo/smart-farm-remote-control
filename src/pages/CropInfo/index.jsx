@@ -46,11 +46,22 @@ function CropInfo() {
           }
         }
 
-        await Promise.all(cropArr)
-          .then(response => Promise.all(response.map(r => r.json())))
+        await Promise.allSettled(cropArr)
+          .then(results => {
+            const res = [];
+            results.forEach(val => {
+              if (val.status === 'fulfilled') {
+                res.push(val);
+              }
+            });
+            return res;
+          })
+          .then(response =>
+            Promise.allSettled(response.map(r => r.value.json())),
+          )
           .then(data => {
             for (let i = 0; i < data.length; i++) {
-              const res = data[i].response;
+              const res = data[i].value.response;
               const len = res.body.numOfRows;
               const items = res.body.items.item;
               for (let j = 0; j < len; j++) {
@@ -67,7 +78,7 @@ function CropInfo() {
           });
         setCrop(result);
       } catch (error) {
-        console.error(error.message);
+        console.error('error: ' + error.message);
       } finally {
         setLoading(false);
       }
