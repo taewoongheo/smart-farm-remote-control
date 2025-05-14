@@ -28,8 +28,8 @@ FirebaseJson json;
 bool signupOK = false;
 unsigned long sendDataPrevMillis = 0;
 unsigned long getThresholdsPrevMillis = 0;
-const int dataInterval = 5000; 
-const int thresholdsInterval = 5000; 
+const int dataInterval = 1000; 
+const int thresholdsInterval = 1000; 
 
 // 센서 값 전역 변수
 float temperature;

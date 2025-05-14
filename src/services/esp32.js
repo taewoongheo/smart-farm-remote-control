@@ -3,7 +3,6 @@ import {firebase} from '@react-native-firebase/database';
 export const sendThreshold = async threshold => {
   try {
     firebase.app().database().ref('/thresholds').update(threshold);
-    console.log(threshold);
     return {
       success: true,
       data: threshold,
